@@ -23,6 +23,7 @@
   --destructive: oklch(0.6451 0.2271 18.15);
   --destructive-dark: oklch(0.6091 0.2446 24.27);
   --destructive-foreground: oklch(0.9805 0.0171 84.5867);
+  --gray: oklch(0.6401 0 0);
   --border: oklch(0.1891 0.0033 17.4452);
   --input: oklch(0.1891 0.0033 17.4452);
   --ring: oklch(0.6835 0.1676 34.7009);
@@ -83,6 +84,7 @@
   --destructive: oklch(0.6451 0.2271 18.15);
   --destructive-dark: oklch(0.6091 0.2446 24.27);
   --destructive-foreground: oklch(0.9805 0.0171 84.5867);
+  --gray: oklch(0.6401 0 0);
   --border: oklch(0.1891 0.0033 17.4452);
   --input: oklch(0.1891 0.0033 17.4452);
   --ring: oklch(0.6835 0.1676 34.7009);
@@ -143,6 +145,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-dark: var(--destructive-dark);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-gray: var(--gray);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -189,5 +192,39 @@
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .debug {
+    @apply border-2 border-red-500;
+  }
+
+  .debug-2 {
+    @apply border-2 border-green-500;
+  }
+
+  .title-1 {
+    @apply text-5xl font-semibold leading-16;
+  }
+
+  .title-2 {
+    @apply text-[40px] font-semibold leading-15;
+  }
+
+  .title-3 {
+    @apply text-[32px] font-semibold leading-12;
+  }
+
+  .title-4 {
+    @apply text-[24px] font-semibold leading-8;
+  }
+
+  .title-5 {
+    @apply text-[20px] font-semibold leading-6;
+  }
+
+  .bg-texture {
+    @apply bg-[repeating-linear-gradient(-45deg,rgba(8,8,8,0.2)_0px,rgba(8,8,8,0.2)_2px,transparent_2px,transparent_4px)];
   }
 }
