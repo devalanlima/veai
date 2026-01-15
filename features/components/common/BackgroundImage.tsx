@@ -48,15 +48,3 @@ export default function BackgroundImage({
     document.body
   );
 }
-
-/* 
-<Image
-        className="h-full w-full object-cover"
-        src={src}
-        alt={alt}
-        width={1440}
-        height={1024}
-      />
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_40%,rgba(0,0,0,1)_100%)]" />
-
-*/
