@@ -14,7 +14,7 @@ export function InputText({
   ...props
 }: InputTextProps) {
   return (
-    <label className={cn("relative block", label && "mt-6")}>
+    <label className={cn("relative block w-full", label && "mt-6")}>
       {label && (
         <span className="absolute -top-6 text-sm text-muted-foreground">
           {label}
