@@ -19,7 +19,7 @@ export default function LoginWithGoogle({
       )}
     >
       <Google />
-      Fazer login com o Google
+      Entrar com o Google
     </Button>
   );
 }

@@ -19,7 +19,7 @@ export default function LoginWithTwitch({
       )}
     >
       <Twitch />
-      Fazer login com a Twitch
+      Entrar com a Twitch
     </Button>
   );
 }
