@@ -4,7 +4,7 @@ import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import VeAi from "@/ui/icons/VeAi";
 import SecurityShield from "@/ui/SVG/SecurityShield";
-import { Send, Undo2 } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import Link from "next/link";
 
 export default function page() {
@@ -21,28 +21,12 @@ export default function page() {
 
             <PasswordRecoveryForm id="password-recovery-form" />
 
-            <div className="w-full">
-              <p className="text-center text-foreground">
-                Insira o e-mail cadastrado para receber o link de redefinição de
-                senha.
-              </p>
-            </div>
-
-            <Button
-              size="lg"
-              className="w-full"
-              type="submit"
-              form="password-recovery-form"
-            >
-              Enviar Email de Redefinição <Send />
-            </Button>
-
             <div className="flex flex-col items-center">
               <Button asChild className="p-0 h-6 text-primary" variant="link">
                 <Link href="/sign-in">
-                  <Undo2 />{" "}
+                  <Undo2 />
                   <span className="text-foreground">Voltar para página de</span>
-                  Login
+                  <span className="-ml-1">Login</span>
                 </Link>
               </Button>
             </div>
