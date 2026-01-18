@@ -3,33 +3,39 @@
 import { InputText } from "@/ui/InputText";
 import { Mail, RefreshCcw, Send } from "lucide-react";
 import { DetailedHTMLProps, FormHTMLAttributes, useState } from "react";
-import { passwordRecoverySchema } from "@/features/schemas/auth/password-recovery/PasswordRecoverySchema";
+import {
+  PasswordRecovery,
+  passwordRecoverySchema,
+} from "@/features/schemas/auth/password-recovery/PasswordRecoverySchema";
 import { Button } from "@/ui/button";
+import { formatZodErrors } from "@/lib/formatZodErrors";
 
 export default function PasswordRecoveryForm({
   ...props
 }: DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [emailSent, setEmailSent] = useState(false);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof PasswordRecovery, string>>
+  >({});
 
-  const handleSubmit = (submit: React.FormEvent<HTMLFormElement>) => {
-    submit.preventDefault();
-    setErrorMessage(undefined);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrors({});
 
-    const form = new FormData(submit.currentTarget);
-    const email = form.get("email");
-    const result = passwordRecoverySchema.safeParse({ email: email });
+    const formData = new FormData(e.currentTarget);
+
+    const data: PasswordRecovery = {
+      email: formData.get("email") as string,
+    };
+
+    const result = passwordRecoverySchema.safeParse(data);
 
     if (result.success) {
-      const data = result.data;
-
-      console.log(data);
-
+      console.log("Form válido:", result.data);
+      // TODO
       setEmailSent(true);
-    } else if (result.error) {
-      setErrorMessage(result.error.issues[0].message);
     } else {
-      setErrorMessage("Erro desconhecido, tente novamente");
+      setErrors(formatZodErrors(result.error));
     }
   };
 
@@ -45,7 +51,8 @@ export default function PasswordRecoveryForm({
           type="email"
           icon={Mail}
           placeholder="Email"
-          errorMessage={errorMessage}
+          autoComplete="email"
+          errorMessage={errors.email}
         />
       )}
       <div className="w-full">
@@ -63,12 +70,7 @@ export default function PasswordRecoveryForm({
       </div>
 
       <div className="h-full flex justify-end items-end">
-        <Button
-          size="lg"
-          className="w-full"
-          type="submit"
-          form="password-recovery-form"
-        >
+        <Button size="lg" className="w-full" type="submit">
           {emailSent ? (
             <span className="flex items-center gap-2">
               Re-enviar Email <RefreshCcw />
