@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "supabase:types": "npx supabase gen types typescript --project-id \"oxliayhnnyxzhkmsuodd\" --schema public > types/supabase/supabase.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "@supabase/supabase-js": "^2.90.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
