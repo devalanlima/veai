@@ -12,6 +12,7 @@ import { Lock, Mail } from "lucide-react";
 import { DetailedHTMLProps, FormHTMLAttributes, useState } from "react";
 import SignUpFormLoading from "./SignUpFormLoading";
 import { useRouter } from "next/navigation";
+import { getAuthErrorMessage } from "@/lib/getAuthErrorMessage";
 
 export default function SignUpForm({
   ...props
@@ -47,7 +48,11 @@ export default function SignUpForm({
 
       if (error) {
         setIsLoading(false);
-        setSupabaseError(error.message);
+        setSupabaseError(
+          error.code
+            ? getAuthErrorMessage(error.code)
+            : "Ocorreu um erro ao criar sua conta.",
+        );
       } else if (data.user) {
         router.push(
           `/verify-email?email=${encodeURIComponent(result.data.email)}`,
