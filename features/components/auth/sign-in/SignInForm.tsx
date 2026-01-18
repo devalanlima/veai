@@ -5,10 +5,14 @@ import {
   signInSchema,
 } from "@/features/schemas/auth/sign-in/SignInSchema";
 import { formatZodErrors } from "@/lib/formatZodErrors";
+import { getAuthErrorMessage } from "@/lib/getAuthErrorMessage";
+import { supabase } from "@/lib/supabase/clients/createClient";
+import { cn } from "@/lib/utils";
 import { Button } from "@/ui/button";
 import { InputText } from "@/ui/InputText";
-import { Lock, Mail } from "lucide-react";
+import { Loader2, Lock, Mail } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { DetailedHTMLProps, FormHTMLAttributes, useState } from "react";
 
 export default function SignInForm({
@@ -18,7 +22,15 @@ export default function SignInForm({
     Partial<Record<keyof SignInSchema, string>>
   >({});
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [supabaseError, setSupabaseError] = useState<string | undefined>();
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
+    setSupabaseError(undefined);
     e.preventDefault();
     setErrors({});
 
@@ -32,11 +44,27 @@ export default function SignInForm({
     const result = signInSchema.safeParse(data);
 
     if (result.success) {
-      console.log("Form válido:", result.data);
-      // TODO
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: result.data.email,
+        password: result.data.password,
+      });
+
+      if (error) {
+        setSupabaseError(
+          error.code
+            ? getAuthErrorMessage(error.code)
+            : "Ocorreu um erro inesperado.",
+        );
+      } else if (data.user) {
+        router.push(`/`);
+        return;
+      } else {
+        setSupabaseError("Ocorreu um erro ao criar sua conta.");
+      }
     } else {
       setErrors(formatZodErrors(result.error));
     }
+    setIsLoading(false);
   };
 
   return (
@@ -52,6 +80,7 @@ export default function SignInForm({
         placeholder="Email"
         autoComplete="email"
         errorMessage={errors.email}
+        disabled={isLoading}
       />
 
       <InputText
@@ -61,20 +90,32 @@ export default function SignInForm({
         placeholder="Senha"
         autoComplete="current-password"
         errorMessage={errors.password}
+        disabled={isLoading}
       />
 
+      {supabaseError && (
+        <p className="text-destructive text-center">{supabaseError}</p>
+      )}
+
       <Button
-        asChild
+        asChild={!isLoading}
         size="lg"
         variant="link"
         className="h-6 underline decoration-1 font-light"
+        disabled={isLoading}
       >
         <Link href="/password-recovery">Esqueceu sua senha?</Link>
       </Button>
 
-      <Button size="lg" className="w-full" type="submit">
-        Entrar
-      </Button>
+      {isLoading ? (
+        <Button size="lg" className="w-full" disabled>
+          <Loader2 className="animate-spin" /> Entrando
+        </Button>
+      ) : (
+        <Button size="lg" className="w-full" type="submit">
+          Entrar
+        </Button>
+      )}
     </form>
   );
 }
