@@ -10,8 +10,8 @@ export const signInSchema = z.object({
     .regex(/[0-9]/, "A senha deve conter ao menos um número")
     .regex(
       /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/,
-      "A senha deve conter ao menos um caractere especial"
+      "A senha deve conter ao menos um caractere especial",
     ),
 });
 
-export type LoginData = z.infer<typeof signInSchema>;
+export type SignInSchema = z.infer<typeof signInSchema>;
