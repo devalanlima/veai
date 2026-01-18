@@ -11,7 +11,7 @@ export const signUpSchema = z
       .regex(/[0-9]/, "A senha deve conter ao menos um número")
       .regex(
         /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/,
-        "A senha deve conter ao menos um caractere especial"
+        "A senha deve conter ao menos um caractere especial",
       ),
     confirmPassword: z
       .string()
@@ -22,4 +22,4 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 
-export type SignUpData = z.infer<typeof signUpSchema>;
+export type SignUpSchema = z.infer<typeof signUpSchema>;
