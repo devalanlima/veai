@@ -7,7 +7,6 @@ import {
 import { formatZodErrors } from "@/lib/formatZodErrors";
 import { getAuthErrorMessage } from "@/lib/getAuthErrorMessage";
 import { supabase } from "@/lib/supabase/clients/createClient";
-import { cn } from "@/lib/utils";
 import { Button } from "@/ui/button";
 import { InputText } from "@/ui/InputText";
 import { Loader2, Lock, Mail } from "lucide-react";
