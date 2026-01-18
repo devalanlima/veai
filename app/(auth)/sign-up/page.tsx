@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function page() {
   return (
     <AuthLayout>
-      <Card className="max-w-93.75 lg:max-w-none lg:w-fit w-full  rounded-none md:rounded-md bg-transparent md:bg-secondary-light/90 border-0 md:backdrop-blur-sm lg:p-8 lg:min-w-107">
+      <Card className="max-w-93.75 lg:w-fit w-full rounded-none md:rounded-md bg-transparent md:bg-secondary-light/90 border-0 md:backdrop-blur-sm lg:p-8 lg:min-w-107">
         <div className="flex flex-col items-center gap-4 p-4">
           <h1 className="title-3 text-foreground">Criar Conta</h1>
           <LoginWithGoogle size="lg" className="w-full" />
