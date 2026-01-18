@@ -5,10 +5,13 @@ import {
   signUpSchema,
 } from "@/features/schemas/auth/sign-up/SignUpSchema";
 import { formatZodErrors } from "@/lib/formatZodErrors";
+import { supabase } from "@/lib/supabase/clients/createClient";
 import { Button } from "@/ui/button";
 import { InputText } from "@/ui/InputText";
 import { Lock, Mail } from "lucide-react";
 import { DetailedHTMLProps, FormHTMLAttributes, useState } from "react";
+import SignUpFormLoading from "./SignUpFormLoading";
+import { useRouter } from "next/navigation";
 
 export default function SignUpForm({
   ...props
@@ -16,8 +19,14 @@ export default function SignUpForm({
   const [errors, setErrors] = useState<
     Partial<Record<keyof SignUpSchema, string>>
   >({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [supabaseError, setSupabaseError] = useState<string | undefined>();
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     e.preventDefault();
     setErrors({});
 
@@ -31,14 +40,29 @@ export default function SignUpForm({
     const result = signUpSchema.safeParse(data);
 
     if (result.success) {
-      console.log("Form válido:", result.data);
-      // TODO: Handle successful validation
+      const { data, error } = await supabase.auth.signUp({
+        email: result.data.email,
+        password: result.data.password,
+      });
+
+      if (error) {
+        setIsLoading(false);
+        setSupabaseError(error.message);
+      } else if (data.user) {
+        router.push(
+          `/verify-email?email=${encodeURIComponent(result.data.email)}`,
+        );
+      } else {
+        setSupabaseError("Ocorreu um erro ao criar sua conta.");
+        setIsLoading(false);
+      }
     } else {
       setErrors(formatZodErrors(result.error));
+      setIsLoading(false);
     }
   };
 
-  return (
+  return !isLoading ? (
     <form
       {...props}
       onSubmit={handleSubmit}
@@ -71,9 +95,13 @@ export default function SignUpForm({
         errorMessage={errors.confirmPassword}
       />
 
+      <p className="text-destructive">{supabaseError}</p>
+
       <Button size="lg" className="w-full" type="submit">
         Criar Conta
       </Button>
     </form>
+  ) : (
+    <SignUpFormLoading isLoading />
   );
 }
