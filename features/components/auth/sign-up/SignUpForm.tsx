@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  SignUpSchema,
+  SignUp,
   signUpSchema,
 } from "@/features/schemas/auth/sign-up/SignUpSchema";
 import { formatZodErrors } from "@/lib/formatZodErrors";
@@ -17,9 +17,9 @@ import { getAuthErrorMessage } from "@/lib/getAuthErrorMessage";
 export default function SignUpForm({
   ...props
 }: DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) {
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof SignUpSchema, string>>
-  >({});
+  const [errors, setErrors] = useState<Partial<Record<keyof SignUp, string>>>(
+    {},
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const [supabaseError, setSupabaseError] = useState<string | undefined>();
@@ -30,9 +30,10 @@ export default function SignUpForm({
     setIsLoading(true);
     e.preventDefault();
     setErrors({});
+    setSupabaseError(undefined);
 
     const formData = new FormData(e.currentTarget);
-    const data: SignUpSchema = {
+    const data: SignUp = {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       confirmPassword: formData.get("confirm-password") as string,
