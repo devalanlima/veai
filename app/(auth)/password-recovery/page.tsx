@@ -1,5 +1,6 @@
 import AuthLayout from "@/features/components/auth/layout/AuthLayout";
 import PasswordRecoveryForm from "@/features/components/auth/password-recovery/PasswordRecoveryForm";
+import { AnimatedWrapper } from "@/ui/AnimatedWrapper";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import SecurityShield from "@/ui/SVG/SecurityShield";
@@ -13,10 +14,14 @@ export default function page() {
         <div className="flex flex-col items-center gap-4 p-4 justify-between h-full">
           <h1 className="title-4 text-foreground">Esqueceu sua Senha?</h1>
           <div className="w-full grid place-items-center">
-            <div className="animate-scale-pulse">
+            <AnimatedWrapper
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+            >
               <SecurityShield />
-            </div>
+            </AnimatedWrapper>
           </div>
+
           <PasswordRecoveryForm />
 
           <div className="flex flex-col items-center">
