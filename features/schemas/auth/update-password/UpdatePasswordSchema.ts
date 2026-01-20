@@ -1,9 +1,8 @@
 import { z } from "zod";
-import { emailField, passwordField } from "../common-fields/CommonFields";
+import { passwordField } from "../common-fields/CommonFields";
 
-export const signUpSchema = z
+export const updatePasswordSchema = z
   .object({
-    email: emailField,
     password: passwordField,
     confirmPassword: passwordField,
   })
@@ -12,4 +11,4 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 
-export type SignUp = z.infer<typeof signUpSchema>;
+export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
