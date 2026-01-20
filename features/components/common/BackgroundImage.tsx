@@ -39,12 +39,12 @@ export default function BackgroundImage({
         priority
         className={cn(
           "absolute top-0 left-0 -z-10 w-full h-full object-cover",
-          "transition-all duration-1500 ease-in-out",
-          loaded ? "blur-0 opacity-100" : "opacity-50 blur-[120px]"
+          "transition-all duration-1000 ease-in-out",
+          loaded ? "blur-0 opacity-100" : "opacity-50 blur-[120px]",
         )}
       />
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_40%,rgba(0,0,0,1)_100%)]" />
     </div>,
-    document.body
+    document.body,
   );
 }
