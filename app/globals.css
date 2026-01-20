@@ -229,18 +229,4 @@
   .bg-texture {
     @apply bg-[repeating-linear-gradient(-45deg,rgba(8,8,8,0.2)_0px,rgba(8,8,8,0.2)_2px,transparent_2px,transparent_4px)];
   }
-
-  @keyframes soft-pulse {
-    0%,
-    100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
-
-  .animate-scale-pulse {
-    animation: soft-pulse 2s ease-in-out infinite;
-  }
 }
