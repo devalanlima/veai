@@ -10,6 +10,7 @@
     "supabase:types": "npx supabase gen types typescript --project-id \"oxliayhnnyxzhkmsuodd\" --schema public > types/supabase/supabase.ts"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.4.1",
     "@radix-ui/react-slot": "^1.2.4",
     "@supabase/supabase-js": "^2.90.1",
     "class-variance-authority": "^0.7.1",
