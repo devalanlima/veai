@@ -111,6 +111,7 @@ export default function SignInForm({
       const authentication = await signIn(email, password, captchaToken);
 
       if (authentication.success) {
+        toast.success("Login bem-sucedido!");
         router.push("/");
       } else {
         setSupabaseError(authentication.message);
