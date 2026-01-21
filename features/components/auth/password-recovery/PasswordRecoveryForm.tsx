@@ -113,7 +113,7 @@ export default function PasswordRecoveryForm({
 
   const passwordRecovery = async (email: string, captchaToken: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_URL}/reset-password`,
+      redirectTo: `${process.env.NEXT_PUBLIC_URL}/update-password`,
       captchaToken,
     });
 
