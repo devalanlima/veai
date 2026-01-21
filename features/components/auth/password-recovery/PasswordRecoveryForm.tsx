@@ -6,6 +6,7 @@ import {
   DetailedHTMLProps,
   FormHTMLAttributes,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import {
@@ -16,8 +17,12 @@ import { Button } from "@/ui/button";
 import { formatZodErrors } from "@/lib/formatZodErrors";
 import { supabase } from "@/lib/supabase/clients/createClient";
 import { getAuthErrorMessage } from "@/lib/getAuthErrorMessage";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
+import { toast } from "sonner";
 
 const RECOVERY_TIMER_KEY = "password-recovery-timer";
+const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+if (!siteKey) console.error("Turnstile key not configured");
 
 const getInitialTimeLeft = () => {
   if (typeof window === "undefined") return 0;
@@ -46,7 +51,11 @@ export default function PasswordRecoveryForm({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [supabaseError, setSupabaseError] = useState<string | undefined>();
+  const [supabaseError, setSupabaseError] = useState<string | null>(null);
+
+  const $turnstile = useRef<TurnstileInstance | null>(null);
+
+  const email = useRef<string | null>(null);
 
   const [timeLeftToResendEmail, setTimeLeftToResendEmail] =
     useState<number>(getInitialTimeLeft());
@@ -73,11 +82,17 @@ export default function PasswordRecoveryForm({
     setTimeLeftToResendEmail(60);
   };
 
+  const validateSchema = (data: PasswordRecovery) => {
+    const schemaResult = passwordRecoverySchema.safeParse(data);
+    return schemaResult;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
     setErrors({});
-    setSupabaseError(undefined);
+    setSupabaseError(null);
 
     const formData = new FormData(e.currentTarget);
 
@@ -85,31 +100,65 @@ export default function PasswordRecoveryForm({
       email: formData.get("email") as string,
     };
 
-    const result = passwordRecoverySchema.safeParse(data);
+    const schemaResult = validateSchema(data);
 
-    if (result.success) {
-      const { error } = await supabase.auth.resetPasswordForEmail(
-        result.data.email,
-        {
-          redirectTo: `${process.env.NEXT_PUBLIC_URL}/reset-password`,
-        },
-      );
-
-      if (error) {
-        setIsLoading(false);
-        setSupabaseError(
-          error.code
-            ? getAuthErrorMessage(error.code)
-            : "Ocorreu um erro inesperado.",
-        );
-      } else {
-        startResendTimer();
-        setEmailSent(true);
-        setIsLoading(false);
-      }
-    } else {
-      setErrors(formatZodErrors(result.error));
+    if (schemaResult.error) {
+      setErrors(formatZodErrors(schemaResult.error));
       setIsLoading(false);
+    } else {
+      email.current = data.email;
+      $turnstile.current?.execute();
+    }
+  };
+
+  const passwordRecovery = async (email: string, captchaToken: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_URL}/reset-password`,
+      captchaToken,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        message: error.code
+          ? getAuthErrorMessage(error.code)
+          : "Ocorreu um erro inesperado.",
+      };
+    }
+
+    return { success: true, message: null };
+  };
+
+  const resetAuthState = () => {
+    $turnstile.current?.reset();
+    setErrors({});
+    setIsLoading(false);
+    setSupabaseError(null);
+  };
+
+  const handleException = (message: string) => {
+    toast.error(message);
+    resetAuthState();
+  };
+
+  const handleOnSuccess = async (captchaToken: string) => {
+    if (email.current) {
+      const tempMail = email.current;
+      email.current = null;
+
+      const result = await passwordRecovery(tempMail, captchaToken);
+
+      if (result.success) {
+        toast.success("Email enviado com sucesso!");
+        setEmailSent(true);
+        startResendTimer();
+      } else {
+        setSupabaseError(result.message);
+        $turnstile.current?.reset();
+      }
+      setIsLoading(false);
+    } else {
+      handleException("Ocorreu um erro ao resgatar os dados do formulário.");
     }
   };
 
@@ -175,6 +224,19 @@ export default function PasswordRecoveryForm({
           )}
         </Button>
       </div>
+
+      {siteKey && (
+        <Turnstile
+          siteKey={siteKey}
+          ref={$turnstile}
+          onSuccess={handleOnSuccess}
+          onError={() =>
+            handleException("Erro ao validar captcha, tente novamente.")
+          }
+          onExpire={() => handleException("Captcha expirado, tente novamente.")}
+          options={{ size: "invisible", execution: "execute" }}
+        />
+      )}
     </form>
   );
 }
