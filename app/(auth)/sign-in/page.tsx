@@ -7,7 +7,7 @@ import { Card } from "@/ui/card";
 import { CornerDownRight } from "lucide-react";
 import Link from "next/link";
 
-export default function page() {
+export default function Page() {
   return (
     <AuthLayout>
       <Card className="max-w-93.75 lg:w-fit w-full h-full max-h-158 rounded-none md:rounded-md bg-transparent md:bg-secondary-light/90 border-0 md:backdrop-blur-sm lg:p-8 lg:min-w-107 md:border-t-5 border-primary">
