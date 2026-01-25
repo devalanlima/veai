@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/ui/button";
 import {
   DropdownMenu,
@@ -22,10 +24,25 @@ import {
   Send,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function BottomNavigation() {
+interface Props extends React.ComponentPropsWithoutRef<typeof NavigationMenu> {
+  viewport?: boolean;
+  hideOnRoute?: string[];
+}
+
+export default function BottomNavigation({ hideOnRoute, ...props }: Props) {
+  const pathname = usePathname();
+
+  if (hideOnRoute?.includes(pathname)) {
+    return null;
+  }
+
   return (
-    <NavigationMenu className="max-h-16 max-w-none w-full bg-secondary-light px-2 [&>*:first-child]:w-full">
+    <NavigationMenu
+      {...props}
+      className="max-h-16 max-w-none w-full bg-secondary-light px-2 [&>*:first-child]:w-full md:hidden border-t-2 border-primary"
+    >
       <NavigationMenuList className="grid grid-cols-4 grid-rows-1">
         <NavigationMenuItem className="w-full h-full">
           <NavigationMenuLink asChild>
@@ -34,7 +51,7 @@ export default function BottomNavigation() {
               className="w-full py-2 flex gap-0 flex-col items-center h-full text-xs"
               asChild
             >
-              <Link href="/" className="focus:text-primary">
+              <Link href="/" className="focus:text-primary hover:text-primary">
                 <House className="w-full size-none text-primary" />
                 Início
               </Link>
