@@ -23,7 +23,9 @@
   --destructive: oklch(0.6451 0.2271 18.15);
   --destructive-dark: oklch(0.6091 0.2446 24.27);
   --destructive-foreground: oklch(0.9805 0.0171 84.5867);
+  --gray-light: oklch(0.7252 0 0);
   --gray: oklch(0.6401 0 0);
+  --gray-dark: oklch(0.5555 0 0);
   --border: oklch(0.1891 0.0033 17.4452);
   --input: oklch(0.1891 0.0033 17.4452);
   --ring: oklch(0.6835 0.1676 34.7009);
@@ -85,7 +87,9 @@
   --destructive: oklch(0.6451 0.2271 18.15);
   --destructive-dark: oklch(0.6091 0.2446 24.27);
   --destructive-foreground: oklch(0.9805 0.0171 84.5867);
+  --gray-light: oklch(0.7252 0 0);
   --gray: oklch(0.6401 0 0);
+  --gray-dark: oklch(0.5555 0 0);
   --border: oklch(0.1891 0.0033 17.4452);
   --input: oklch(0.1891 0.0033 17.4452);
   --ring: oklch(0.6835 0.1676 34.7009);
@@ -147,7 +151,9 @@
   --color-destructive: var(--destructive);
   --color-destructive-dark: var(--destructive-dark);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-gray-light: var(--gray-light);
   --color-gray: var(--gray);
+  --color-gray-dark: var(--gray-dark);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
