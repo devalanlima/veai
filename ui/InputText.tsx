@@ -18,9 +18,9 @@ export function InputText({
   return (
     <label
       className={cn(
-        "relative block w-full",
+        "relative block w-full h-11",
         label && "mt-6",
-        errorMessage && "mb-6"
+        errorMessage && "mb-6",
       )}
     >
       {label && (
@@ -32,8 +32,8 @@ export function InputText({
       {Icon && (
         <Icon
           className={cn(
-            "absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-primary",
-            errorMessage && "text-destructive"
+            "absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary",
+            errorMessage && "text-destructive",
           )}
         />
       )}
@@ -48,7 +48,7 @@ export function InputText({
         <TriangleAlert
           className={cn(
             "absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-primary",
-            errorMessage && "text-destructive"
+            errorMessage && "text-destructive",
           )}
         />
       )}
