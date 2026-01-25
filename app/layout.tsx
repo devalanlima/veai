@@ -5,6 +5,7 @@ import Footer from "@/features/components/common/Footer";
 import { Toaster } from "@/ui/sonner";
 import Header from "@/features/components/common/Header/Header";
 import { AuthProvider } from "@/features/components/providers/AuthProvider";
+import BottomNavigation from "@/features/components/common/BottomNavigation/BottomNavigation";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -22,15 +23,31 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authNavigation = [
+    "/sign-in",
+    "/sign-up",
+    "/verify-email",
+    "/update-password",
+    "/password-recovery",
+  ];
+
   return (
     <html lang="pt-BR">
       <body
-        className={`${poppins.variable} antialiased flex flex-col w-full min-h-screen relative`}
+        className={`${poppins.variable} antialiased min-h-screen flex flex-col`}
       >
         <AuthProvider>
-          <Header />
-          <main className="flex flex-1 w-full">{children}</main>
+          <Header hideOnRoute={authNavigation} />
+
+          <main className="flex-1 w-full pb-16 md:pb-0">{children}</main>
+
           <Footer />
+
+          <BottomNavigation
+            hideOnRoute={authNavigation}
+            className="fixed bottom-0 left-0 right-0 z-50"
+          />
+
           <Toaster />
         </AuthProvider>
       </body>
