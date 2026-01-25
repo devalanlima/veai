@@ -6,21 +6,24 @@ interface InputTextProps extends React.ComponentProps<typeof Input> {
   label?: string;
   icon?: LucideIcon;
   errorMessage?: string;
+  containerClassName?: string;
 }
 
 export function InputText({
   className,
   label,
   errorMessage,
+  containerClassName,
   icon: Icon,
   ...props
 }: InputTextProps) {
   return (
     <label
       className={cn(
-        "relative block w-full h-11",
+        "relative block h-11",
         label && "mt-6",
         errorMessage && "mb-6",
+        containerClassName,
       )}
     >
       {label && (
@@ -41,7 +44,7 @@ export function InputText({
       <Input
         aria-invalid={!!errorMessage}
         {...props}
-        className={cn(Icon && "pl-12", className)}
+        className={cn(Icon && "pl-12", "w-full", className)}
       />
 
       {errorMessage && (
