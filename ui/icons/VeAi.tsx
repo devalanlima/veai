@@ -1,6 +1,9 @@
-export default function VeAi() {
+import { SVGProps } from "react";
+
+export default function VeAi({ ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
+      {...props}
       width="100%"
       height="100%"
       viewBox="0 0 1000 1000"
